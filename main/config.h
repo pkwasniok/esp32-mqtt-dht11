@@ -11,5 +11,5 @@
 #define CONFIG_GPIO_LED   15
 #define CONFIG_GPIO_DHT11  0
 
-#define CONFIG_SAMPLING_PERIOD_MS 1000 // 5 min
+#define CONFIG_SAMPLING_PERIOD_MS 1 * 60 * 1000 // 1 min
 

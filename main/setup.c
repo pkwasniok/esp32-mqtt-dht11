@@ -63,13 +63,14 @@ int netif_setup(void) {
     return SUCCESS;
 }
 
-int app_setup(void) {
+int app_setup(dht_t* dht) {
     int state = STATE_SETUP_IO;
 
     while (1) {
         switch (state) {
 
             case STATE_SETUP_IO:
+                dht_init(dht, DHT_DHT11, CONFIG_GPIO_DHT11);
                 led_setup();
                 ESP_LOGI(TAG, "Finished IO setup");
                 state = STATE_SETUP_NVS;

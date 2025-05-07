@@ -1,6 +1,7 @@
 #include "led.h"
 #include "setup.h"
 #include "mqtt.h"
+#include "dht11.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_system.h"
@@ -14,15 +15,16 @@
 
 void app_main(void)
 {
-    int state = STATE_SETUP;
+    dht_t dht;
 
+    int state = STATE_SETUP;
     while (1) {
         switch (state) {
 
             case STATE_SETUP:
                 ESP_LOGI(TAG, "Entering setup state");
 
-                if (app_setup() == SETUP_SUCCESS) {
+                if (app_setup(&dht) == SETUP_SUCCESS) {
                     state = STATE_RUNNING; 
                 } else {
                     state = STATE_ERROR;
@@ -32,12 +34,10 @@ void app_main(void)
 
             case STATE_RUNNING:
                 ESP_LOGI(TAG, "Entering running state");
-
                 led_enable();
+                mqtt_task(&dht);
 
-                mqtt_task(NULL);
                 state = STATE_ERROR;
-
                 led_disable();
 
                 break;
